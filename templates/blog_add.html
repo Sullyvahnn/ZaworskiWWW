@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+      <div class="container mt-5">
+    <h2>Dodaj nowy artykuł</h2>
+
+    <!-- Komunikat sukcesu (jeśli przekazany z backendu) -->
+    {% if success_message %}
+    <div class="alert alert-success">{{ success_message }}</div>
+    {% endif %}
+
+    <!-- Formularz -->
+    <form method="POST" action="/blog/add">
+      <!-- CSRF token (jeśli używasz Flask-WTF, Django, itd.) -->
+      {% if csrf_token %}{{ csrf_token() }}{% endif %}
+
+      <!-- Tytuł -->
+      <div class="mb-3">
+        <label for="title" class="form-label">Tytuł</label>
+        <input type="text" class="form-control" id="title" name="title"
+          value="{{ request.form.title or '' }}">
+      </div>
+
+      <!-- Treść -->
+      <div class="mb-3">
+        <label for="content" class="form-label">Treść</label>
+        <textarea class="form-control" id="content" name="content"
+          rows="6">{{ request.form.content or '' }}</textarea>
+      </div>
+
+      <!-- Przycisk -->
+      <button type="submit" class="btn btn-primary">Dodaj artykuł</button>
+    </form>
+  </div>
+{% endblock %}
