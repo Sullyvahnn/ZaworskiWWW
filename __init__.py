@@ -34,10 +34,13 @@ def create_app():
     from views.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
+    from views.chat import bp as chat_blueprint
+    app.register_blueprint(chat_blueprint)
+
     return app
 
 if __name__ == '__main__':
     app = create_app()
     with app.app_context():
         db.create_all()
-    app.run()
+    app.run(debug=True)

@@ -1,15 +1,20 @@
 from flask import render_template, Blueprint, request
+from flask_login import current_user
 
 from models import User
 
-main = Blueprint('main', __name__)
 
-@main.route('/?<int:user_id>', methods=['GET'])
-def index(user_id):
-    username = User.query.filter_by(id=user_id).first().username
-    return render_template('base.html', username=username)
+def get_logged_user():
+    if current_user.is_authenticated:
+        return current_user
+    else:
+        return User.query.filter_by(id=1).first()
+
+
+main = Blueprint('main', __name__)
 
 @main.route('/')
 def serve_base():
-    return render_template("base.html", username="Not Logged in")
+    return render_template("base.html", username=get_logged_user().username,)
+
 

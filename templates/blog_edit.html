@@ -1,5 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-    test
+    <div class="container mt-5">
+        <div class="mb-4">
+            <a href="/blog/{{ article.id }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Powrót do artykułu
+            </a>
+        </div>
+
+        <h1 class="mb-4">Edytuj artykuł</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('bp_blog.blog_edit_get_post', article_id=article.id) }}">
+  <div class="mb-3">
+    <label for="title" class="form-label">Tytuł</label>
+    <input type="text" name="title" id="title" class="form-control {% if errors.title %}is-invalid{% endif %}"
+           value="{{ request.form.title if request.method == 'POST' else article.title }}">
+    {% if errors.title %}
+      <div class="invalid-feedback">{{ errors.title }}</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="content" class="form-label">Treść</label>
+    <textarea name="content" id="content" rows="10" class="form-control {% if errors.content %}is-invalid{% endif %}">{{ request.form.content if request.method == 'POST' else article.content }}</textarea>
+    {% if errors.content %}
+      <div class="invalid-feedback">{{ errors.content }}</div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="btn btn-success">Zapisz</button>
+        </form>
+    </div>
 {% endblock %}
